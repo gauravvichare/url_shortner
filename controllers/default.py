@@ -1,24 +1,32 @@
 # -*- coding: utf-8 -*-
-# this file is released under public domain and you can use without limitations
-
-# -------------------------------------------------------------------------
-# This is a sample controller
-# - index is the default action of any application
-# - user is required for authentication and authorization
-# - download is for downloading files uploaded in the db (does streaming)
-# -------------------------------------------------------------------------
 
 
 def index():
-    """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
+    # form = FORM(DIV(TEXTAREA(), SPAN(BUTTON('Shorten url', _class='btn btn-default', _type='submit', _value='submit')), _class=''))
+    submit = INPUT(_class="btn btn-primary", _type="Submit", _value="Shorten Url")
 
-    if you need a simple wiki simply replace the two lines below with:
-    return auth.wiki()
+    form = SQLFORM(db.url, buttons=[submit])
+    form.elements('textarea')[0]['_placeholder'] = "Enter your long url here"
+
+    if form.process().accepted:
+        response.flash = 'form accepted'
+
+    fields = [db.url.long_url, db.url.created_on]
+    db.url.created_on.readable = True
+    link = _get_analytics_link()
+    grid = SQLFORM.grid(db.url.created_by, create=False, editable=False, searchable=False,
+                        deletable=True, details=False, csv=False, paginate=10,
+                        fields=fields, showbuttontext=False,
+                        sorter_icons=(XML('&#x2191;'), XML('&#x2193;')),
+                        _class="web2py_grid url_grid", links=link)
+
+    return dict(form=form, grid=grid)
+
+
+def statistics():
     """
-    response.flash = T("Hello World")
-    return dict(message=T('Welcome to web2py!'))
+    """
+    pass
 
 
 def user():
@@ -58,4 +66,19 @@ def call():
     """
     return service()
 
+
+def _get_analytics_link():
+    """
+    Return QR code link and statistics link.
+    """
+
+    link = [lambda row: SPAN(A(SPAN(_class="icon glyphicon glyphicon-qrcode"),
+                               _href='javascript:void(0)',
+                               _class='button btn btn-default qr_code',
+                               _title='QR Code'),
+                             A(SPAN(_class="icon glyphicon glyphicon-stats"),
+                               _href=URL('default', 'statistics', args=row.id),
+                               _class='button btn btn-default statistics',
+                               _title='Statistics'))]
+    return link
 

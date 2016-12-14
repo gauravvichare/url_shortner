@@ -81,11 +81,14 @@ response.form_label_separator = myconf.get('forms.separator') or ''
 # -------------------------------------------------------------------------
 
 from gluon.tools import Auth, Service, PluginManager
+from gluon.tools import Recaptcha
 
 # host names must be a list of allowed host names (glob syntax allowed)
 auth = Auth(db, host_names=myconf.get('host.names'))
 service = Service()
 plugins = PluginManager()
+
+# auth.settings.captcha = Recaptcha(request, '6LcD0w4UAAAAALjOvI7bFgcbWOux6VipvnVAy3Hb', '6LcD0w4UAAAAACG4UdkBs-rq4Eg4srqTWGfl7_Rv')
 
 # -------------------------------------------------------------------------
 # create all tables needed by auth if not custom tables
@@ -129,4 +132,8 @@ auth.settings.reset_password_requires_verification = True
 # -------------------------------------------------------------------------
 # after defining tables, uncomment below to enable auditing
 # -------------------------------------------------------------------------
-# auth.enable_record_versioning(db)
+db._common_fields.append(auth.signature)
+db.define_table('url', Field('long_url', 'text', label=''))
+db.url.created_on.represent = lambda created_on, row: created_on.strftime('%b %d, %Y')
+
+auth.enable_record_versioning(db)
