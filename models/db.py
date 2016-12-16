@@ -133,7 +133,7 @@ auth.settings.reset_password_requires_verification = True
 # after defining tables, uncomment below to enable auditing
 # -------------------------------------------------------------------------
 db._common_fields.append(auth.signature)
-db.define_table('url', Field('long_url', 'text', label=''))
+db.define_table('url', Field('long_url', 'text', widget=SQLFORM.widgets.string.widget))
 db.url.created_on.represent = lambda created_on, row: created_on.strftime('%b %d, %Y')
 
 auth.enable_record_versioning(db)

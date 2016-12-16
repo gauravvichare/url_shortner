@@ -3,11 +3,11 @@
 
 def index():
     # form = FORM(DIV(TEXTAREA(), SPAN(BUTTON('Shorten url', _class='btn btn-default', _type='submit', _value='submit')), _class=''))
-    submit = INPUT(_class="btn btn-primary", _type="Submit", _value="Shorten Url")
+    submit = INPUT(_class="btn btn-primary", _type="Submit", _value="Shorten")
 
     form = SQLFORM(db.url, buttons=[submit])
-    form.elements('textarea')[0]['_placeholder'] = "Enter your long url here"
-
+    form.elements('input')[0]['_placeholder'] = "Enter your long url here"
+    form.elements('.control-label', replace=None)
     if form.process().accepted:
         response.flash = 'form accepted'
 

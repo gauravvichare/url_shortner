@@ -11,5 +11,5 @@ def get_qr_code():
 
 def _get_qr_code(**get_params):
     data = get_params['url']
-    qr = pyqrcode.create('Unladden swallow')
+    qr = pyqrcode.create('www.google.comwww.google.comwww.google.comUnladden swallow')
     return dict(binary_array=qr.code)

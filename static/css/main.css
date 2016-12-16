@@ -1,15 +1,22 @@
-.url-form textarea {
-    resize: none;
+.main-container{
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.url-form input {
+/*    resize: none;*/
     height: 60px;
-    overflow: hidden;
+/*    overflow: hidden;*/
     width: 60%;
     border-radius: 3px 0 0 3px;
 }
 
-.url-form .btn.btn-default
+.url-form .btn.btn-primary
 {
     vertical-align: top;
     height: 60px;
+    width: 10%;
+    min-width: 85px;
     border-radius: 0 3px 3px 0;
     background-color: #2c3e50;
     border-color: #2c3e50;
@@ -22,6 +29,7 @@
 
 .url-form{
     margin: 30px 0 30px 0;
+    text-align: center;
 }
 
 .url_grid table tbody tr{
@@ -57,4 +65,40 @@
 
 .footer{
     background: white;
+}
+
+
+#qr_code_modal .modal-body table td{
+    border: none;
+    height: 5px;
+    width: 5px;
+}
+#qr_code_modal .modal-body table{
+    margin: 0 auto;
+}
+#qr_code_modal .modal-body table td.black{
+    background-color: black;
+}
+
+#qr_code_modal .modal-body table td.white{
+    background-color: white;
+}
+
+/* resize modal dynamically based on content*/
+#qr_code_modal .modal-dialog{
+    position: relative;
+    display: table; //This is important
+    overflow-y: auto;
+    overflow-x: auto;
+    width: auto;
+    min-width: 300px;
+}
+
+/* match modal footer height with header*/
+
+.modal-footer {
+    padding: 15px;
+}
+.modal-footer .btn{
+    padding: 5px 15px;
 }
