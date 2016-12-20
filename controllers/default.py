@@ -1,17 +1,21 @@
 # -*- coding: utf-8 -*-
+from base62 import hash1
 
 
 def index():
-    # form = FORM(DIV(TEXTAREA(), SPAN(BUTTON('Shorten url', _class='btn btn-default', _type='submit', _value='submit')), _class=''))
+    short_link = ""
     submit = INPUT(_class="btn btn-primary", _type="Submit", _value="Shorten")
 
     form = SQLFORM(db.url, buttons=[submit])
     form.elements('input')[0]['_placeholder'] = "Enter your long url here"
+    form.elements('input')[0]['_autocomplete'] = "off"
     form.elements('.control-label', replace=None)
     if form.process().accepted:
-        response.flash = 'form accepted'
 
-    fields = [db.url.long_url, db.url.created_on]
+        short_link = "http://short.ur/" + "TeSt4"
+        response.flash = 'Short url created'
+    fields = [db.url.long_url, db.url.created_on, db.url.short_code]
+    db.url.short_code.readable = True
     db.url.created_on.readable = True
     link = _get_analytics_link()
     grid = SQLFORM.grid(db.url.created_by, create=False, editable=False, searchable=False,
@@ -20,7 +24,7 @@ def index():
                         sorter_icons=(XML('&#x2191;'), XML('&#x2193;')),
                         _class="web2py_grid url_grid", links=link)
 
-    return dict(form=form, grid=grid)
+    return dict(form=form, grid=grid, short_link=short_link)
 
 
 def statistics():

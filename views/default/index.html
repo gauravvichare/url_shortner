@@ -3,7 +3,14 @@
 <div class="url-form">
   {{=form}}
 </div>
-
+{{if short_link:}}
+<div class="short-url">
+    <div class="alert alert-success" role="alert">
+        {{=short_link}}
+        <button type="button" class="btn btn-default btn-xs">Copy</button>
+    </div>
+</div>
+{{pass}}
 {{=grid}}
 
 <!-- QR code Modal starts-->

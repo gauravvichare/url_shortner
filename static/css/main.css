@@ -28,8 +28,9 @@
 }
 
 .url-form{
-    margin: 30px 0 30px 0;
+    padding: 30px 0 30px 0;
     text-align: center;
+    min-width: 250px;
 }
 
 .url_grid table tbody tr{
@@ -101,4 +102,29 @@
 }
 .modal-footer .btn{
     padding: 5px 15px;
+}
+
+.short-url{
+    margin: 0 auto;
+    text-align: center;
+    padding: 10px 0 45px 0;
+    min-width: 250px;
+}
+.short-url .alert-success.alert{
+    display: inline;
+}
+
+.short-url .alert-success.alert .btn{
+    margin: 0 0 3px 5px;
+}
+
+.alert-success {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+/* flash message*/
+div.w2p_flash.alert{
+    right: 10px;
 }
