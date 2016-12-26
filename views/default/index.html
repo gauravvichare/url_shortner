@@ -6,8 +6,8 @@
 {{if short_link:}}
 <div class="short-url">
     <div class="alert alert-success" role="alert">
-        {{=short_link}}
-        <button type="button" class="btn btn-default btn-xs">Copy</button>
+        <span>{{=short_link}}</span>
+        <button type="button" class="btn btn-default btn-xs copy-button">Copy</button>
     </div>
 </div>
 {{pass}}
@@ -47,6 +47,20 @@
                     keyboard: false
                 });
         });
+        $('.copy-button').on('click', function()
+        {
+            copyToClipboard($(this));
+            // $('.short-url button').animate(
+            //  {
+            //   color:red,
+            //   opacity: 1,
+            //   top: '-=100',
+            // }, 500
+            //  );
+        // copied animation
+        // $('.short-url span').addClass('copied');
+        // // setTimeout(function() { $('.short-url span').removeClass('copied'); }, 1500);
+        });
     });
 
 function insert_qr_code(){
@@ -83,6 +97,15 @@ function insert_qr_code(){
             console.log("error");
         }
     });
+}
+
+function copyToClipboard(thisObj) {
+    debugger;
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val(thisObj.parent().find('span').text()).select();
+    document.execCommand("copy");
+    $temp.remove();
 }
 
 </script>

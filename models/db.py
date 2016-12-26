@@ -139,7 +139,15 @@ db.define_table('url', Field('long_url', 'text'),
 db.url.short_code.readable = False
 db.url.short_code.writable = False
 db.url.long_url.widget = SQLFORM.widgets.string.widget
-db.url.created_on.represent = lambda created_on, row: created_on.strftime('%b %d, %Y')
+db.url.long_url.represent = lambda long_url, row: A(long_url, _href=long_url)
+db.url.created_on.represent = lambda created_on, row: created_on.strftime('%b %d, %Y') if created_on else ''
+db.url.short_code.represent = lambda short_code, row: _create_short_url(short_code)
 
 
+def _create_short_url(short_code):
+    """
+    """
+    if short_code:
+        copy = DIV(SPAN("http://short.ur/" + short_code), BUTTON('copy', _type="button", _class="btn btn-default btn-xs copy-button"))
+        return copy
 auth.enable_record_versioning(db)

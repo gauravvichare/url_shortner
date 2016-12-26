@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from base62 import hash1
+from base62 import encode
 
 
 def index():
@@ -11,18 +11,18 @@ def index():
     form.elements('input')[0]['_autocomplete'] = "off"
     form.elements('.control-label', replace=None)
     if form.process().accepted:
-
+        db(db.url.id == form.vars.id).update(short_code="TeSt4")
         short_link = "http://short.ur/" + "TeSt4"
         response.flash = 'Short url created'
     fields = [db.url.long_url, db.url.created_on, db.url.short_code]
     db.url.short_code.readable = True
     db.url.created_on.readable = True
     link = _get_analytics_link()
-    grid = SQLFORM.grid(db.url.created_by, create=False, editable=False, searchable=False,
+    grid = SQLFORM.grid(db.url, create=False, editable=False, searchable=False,
                         deletable=True, details=False, csv=False, paginate=10,
                         fields=fields, showbuttontext=False,
                         sorter_icons=(XML('&#x2191;'), XML('&#x2193;')),
-                        _class="web2py_grid url_grid", links=link)
+                        _class="web2py_grid url_grid", links=link, maxtextlength=50)
 
     return dict(form=form, grid=grid, short_link=short_link)
 

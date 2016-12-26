@@ -114,9 +114,18 @@
     display: inline;
 }
 
-.short-url .alert-success.alert .btn{
+.copy-button{
     margin: 0 0 3px 5px;
 }
+
+.url_grid table tr td .copy-button { visibility: hidden;}
+.url_grid table tr td:first-child{
+      overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    max-width:10em;
+}
+.url_grid table tr:hover td .copy-button { visibility:visible;}
 
 .alert-success {
     color: #31708f;
@@ -127,4 +136,34 @@
 /* flash message*/
 div.w2p_flash.alert{
     right: 10px;
+}
+
+.copied::after {
+  position: absolute;
+/*  top: 12%;
+  right: 110%;*/
+  display: inline-block;
+  content: "copied";
+  font-size: 0.75em;
+  padding: 2px 3px;
+  color: #fff;
+  background-color: #22a;
+  border-radius: 3px;
+  opacity: 0;
+  will-change: opacity, transform;
+  animation: showcopied 1.5s ease;
+}
+
+@keyframes showcopied {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  70% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+  }
 }
