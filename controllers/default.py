@@ -3,6 +3,7 @@ from base62 import encode
 
 
 def index():
+    import pdb; pdb.set_trace()
     short_link = ""
     submit = INPUT(_class="btn btn-primary", _type="Submit", _value="Shorten")
 
@@ -14,11 +15,19 @@ def index():
         db(db.url.id == form.vars.id).update(short_code="TeSt4")
         short_link = "http://short.ur/" + "TeSt4"
         response.flash = 'Short url created'
+
+    # grid variables
     fields = [db.url.long_url, db.url.created_on, db.url.short_code]
     db.url.short_code.readable = True
     db.url.created_on.readable = True
     link = _get_analytics_link()
-    grid = SQLFORM.grid(db.url, create=False, editable=False, searchable=False,
+
+    if auth.is_logged_in():
+        query = (db.url.created_by == auth.user.id)
+    else:
+        query = (db.url.session_id == response.session_id)
+
+    grid = SQLFORM.grid(query, create=False, editable=False, searchable=False,
                         deletable=True, details=False, csv=False, paginate=10,
                         fields=fields, showbuttontext=False,
                         sorter_icons=(XML('&#x2191;'), XML('&#x2193;')),
