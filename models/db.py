@@ -82,6 +82,7 @@ response.form_label_separator = myconf.get('forms.separator') or ''
 
 from gluon.tools import Auth, Service, PluginManager
 from gluon.tools import Recaptcha
+from gluon.utils import web2py_uuid
 
 # host names must be a list of allowed host names (glob syntax allowed)
 auth = Auth(db, host_names=myconf.get('host.names'))
@@ -112,6 +113,11 @@ auth.settings.registration_requires_verification = False
 auth.settings.registration_requires_approval = False
 auth.settings.reset_password_requires_verification = True
 
+if not auth.is_logged_in():
+    if 'anon_user_uid' not in request.cookies:
+        response.cookies['anon_user_uid'] = web2py_uuid()
+        response.cookies['anon_user_uid']['path'] = '/'
+        response.cookies['anon_user_uid']['expires'] = 7 * 24 * 3600
 # -------------------------------------------------------------------------
 # Define your tables below (or better in another model file) for example
 #
@@ -135,12 +141,12 @@ auth.settings.reset_password_requires_verification = True
 db._common_fields.append(auth.signature)
 db.define_table('url', Field('long_url', 'text'),
                 Field('short_code', 'string', label="Short URL"),
-                Field('session_id', 'string', default=response.session_id))
+                Field('created_by_anon', 'string'))
 
 db.url.short_code.readable = False
 db.url.short_code.writable = False
-db.url.session_id.readable = False
-db.url.session_id.writable = False
+db.url.created_by_anon.readable = False
+db.url.created_by_anon.writable = False
 db.url.long_url.widget = SQLFORM.widgets.string.widget
 db.url.long_url.represent = lambda long_url, row: A(long_url, _href=long_url)
 db.url.created_on.represent = lambda created_on, row: created_on.strftime('%b %d, %Y') if created_on else ''
@@ -151,6 +157,6 @@ def _create_short_url(short_code):
     """
     """
     if short_code:
-        copy = DIV(SPAN("http://short.ur/" + short_code), BUTTON('copy', _type="button", _class="btn btn-default btn-xs copy-button"))
+        copy = DIV(SPAN("http://urlr.in/" + short_code), BUTTON('copy', _type="button", _class="btn btn-default btn-xs copy-button"))
         return copy
 auth.enable_record_versioning(db)

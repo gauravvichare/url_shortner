@@ -1,21 +1,44 @@
 # -*- coding: utf-8 -*-
 from base62 import encode
+NO_RECORD = -1
 
 
 def index():
-    import pdb; pdb.set_trace()
-    short_link = ""
+    short_link = session.get('short_link')
+    if short_link:
+        del session.short_link
     submit = INPUT(_class="btn btn-primary", _type="Submit", _value="Shorten")
 
     form = SQLFORM(db.url, buttons=[submit])
     form.elements('input')[0]['_placeholder'] = "Enter your long url here"
     form.elements('input')[0]['_autocomplete'] = "off"
     form.elements('.control-label', replace=None)
-    if form.process().accepted:
-        db(db.url.id == form.vars.id).update(short_code="TeSt4")
-        short_link = "http://short.ur/" + "TeSt4"
-        response.flash = 'Short url created'
 
+    if form.process().accepted:
+        if not auth.is_logged_in():
+            anon_id = _get_anon_uid()
+        else:
+            anon_id = None
+        update_dict = dict(short_code="TeSt4", created_by_anon=anon_id)
+        db(db.url.id == form.vars.id).update(**update_dict)
+
+        # set short link in session and redirect to same page
+        # Redirection is done to avoid following browser
+        # warnings when page is reloaded or back button is clicked
+        # 1. Confirm form resubmission
+        # 2. Confirm form resubmission: ERR_CACHE_MISS
+        session['short_link'] = "http://urlr.in/" + "TeSt4"
+        session.flash = 'Short url created'
+        redirect(URL('index'))
+
+    grid = LOAD('default', 'url_grid.load', ajax=True)
+    return dict(form=form, grid=grid, short_link=short_link)
+
+
+def url_grid():
+    """
+    """
+    anon_id = _get_anon_uid()
     # grid variables
     fields = [db.url.long_url, db.url.created_on, db.url.short_code]
     db.url.short_code.readable = True
@@ -24,16 +47,17 @@ def index():
 
     if auth.is_logged_in():
         query = (db.url.created_by == auth.user.id)
+    elif anon_id:
+        query = (db.url.created_by_anon == anon_id)
     else:
-        query = (db.url.session_id == response.session_id)
+        query = (db.url.id == NO_RECORD)
 
     grid = SQLFORM.grid(query, create=False, editable=False, searchable=False,
                         deletable=True, details=False, csv=False, paginate=10,
                         fields=fields, showbuttontext=False,
                         sorter_icons=(XML('&#x2191;'), XML('&#x2193;')),
                         _class="web2py_grid url_grid", links=link, maxtextlength=50)
-
-    return dict(form=form, grid=grid, short_link=short_link)
+    return dict(grid=grid)
 
 
 def statistics():
@@ -95,3 +119,10 @@ def _get_analytics_link():
                                _title='Statistics'))]
     return link
 
+
+def _get_anon_uid():
+    """
+    """
+    if 'anon_user_uid' in request.cookies:
+        return request.cookies['anon_user_uid'].value
+#

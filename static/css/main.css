@@ -138,32 +138,6 @@ div.w2p_flash.alert{
     right: 10px;
 }
 
-.copied::after {
-  position: absolute;
-/*  top: 12%;
-  right: 110%;*/
-  display: inline-block;
-  content: "copied";
-  font-size: 0.75em;
-  padding: 2px 3px;
-  color: #fff;
-  background-color: #22a;
-  border-radius: 3px;
-  opacity: 0;
-  will-change: opacity, transform;
-  animation: showcopied 1.5s ease;
-}
-
-@keyframes showcopied {
-  0% {
-    opacity: 0;
-    transform: translateX(100%);
-  }
-  70% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  100% {
-    opacity: 0;
-  }
+.app-logo{
+  height: 30px;
 }

@@ -1,0 +1,98 @@
+{{=grid}}
+
+<!-- QR code Modal starts-->
+<div class="modal fade" id="qr_code_modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">QR Code</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- QR code Modal ends-->
+
+
+<script type="text/javascript">
+
+    jQuery(document).ready(function(){
+        $('.button.qr_code').on('click', function()
+        {
+            insert_qr_code();
+            $('#qr_code_modal').modal(
+                {
+                    show: true,
+                    // prevent user from closing modal by clicking outside
+                    // of the modal or pressing escape
+                    backdrop: 'static',
+                    keyboard: false
+                });
+        });
+        $('.copy-button').on('click', function()
+        {
+            copyToClipboard($(this));
+            // $('.short-url button').animate(
+            //  {
+            //   color:red,
+            //   opacity: 1,
+            //   top: '-=100',
+            // }, 500
+            //  );
+        // copied animation
+        // $('.short-url span').addClass('copied');
+        // // setTimeout(function() { $('.short-url span').removeClass('copied'); }, 1500);
+        });
+    });
+
+function insert_qr_code(){
+    $.ajax({
+        url: "{{=URL('api', 'get_qr_code')}}",
+        dataType: 'json',
+        data: {'url': 'www.google.com'},
+        success: function(response)
+        {
+            var table = $("<table />");
+            for(i=0; i<response.binary_array.length; i++)
+            {
+              var table_row = $("<tr />");
+              for(j=0; j<response.binary_array.length; j++)
+              {
+                var td = $("<td />").html(" ")
+                if(response.binary_array[i][j] == 1){
+                  td.addClass('black');
+                }
+                else{
+                  td.addClass('white');
+                }
+                table_row.append(td);
+              }
+              table.append(table_row);
+
+            }
+            $('#qr_code_modal .modal-body table').remove();
+            $('#qr_code_modal .modal-body').append(table);
+
+        },
+        error:function(response)
+        {
+            console.log("error");
+        }
+    });
+}
+
+function copyToClipboard(thisObj) {
+    debugger;
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val(thisObj.parent().find('span').text()).select();
+    document.execCommand("copy");
+    $temp.remove();
+}
+
+</script>
