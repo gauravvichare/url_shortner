@@ -139,7 +139,7 @@ if not auth.is_logged_in():
 # after defining tables, uncomment below to enable auditing
 # -------------------------------------------------------------------------
 db._common_fields.append(auth.signature)
-db.define_table('url', Field('long_url', 'text'),
+db.define_table('url', Field('long_url', 'text', requires=IS_URL()),
                 Field('short_code', 'string', label="Short URL"),
                 Field('created_by_anon', 'string'))
 

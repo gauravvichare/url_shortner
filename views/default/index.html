@@ -10,5 +10,12 @@
         <button type="button" class="btn btn-default btn-xs copy-button">Copy</button>
     </div>
 </div>
+{{elif form.errors:}}
+<div class="error-message">
+    <div class="alert alert-warning alert-dismissible" role="alert">
+      <strong>Error!</strong> {{=form.errors['long_url']}}.
+        <button type="button" class="" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+</div>
 {{pass}}
 {{=grid}}

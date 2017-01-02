@@ -9,7 +9,7 @@ def index():
         del session.short_link
     submit = INPUT(_class="btn btn-primary", _type="Submit", _value="Shorten")
 
-    form = SQLFORM(db.url, buttons=[submit])
+    form = SQLFORM(db.url, buttons=[submit],hideerror=True)
     form.elements('input')[0]['_placeholder'] = "Enter your long url here"
     form.elements('input')[0]['_autocomplete'] = "off"
     form.elements('.control-label', replace=None)
@@ -30,6 +30,8 @@ def index():
         session['short_link'] = "http://urlr.in/" + "TeSt4"
         session.flash = 'Short url created'
         redirect(URL('index'))
+    elif form.errors:
+        response.flash = ""
 
     grid = LOAD('default', 'url_grid.load', ajax=True)
     return dict(form=form, grid=grid, short_link=short_link)
@@ -54,8 +56,7 @@ def url_grid():
 
     grid = SQLFORM.grid(query, create=False, editable=False, searchable=False,
                         deletable=True, details=False, csv=False, paginate=10,
-                        fields=fields, showbuttontext=False,
-                        sorter_icons=(XML('&#x2191;'), XML('&#x2193;')),
+                        fields=fields, showbuttontext=False, user_signature=False,
                         _class="web2py_grid url_grid", links=link, maxtextlength=50)
     return dict(grid=grid)
 

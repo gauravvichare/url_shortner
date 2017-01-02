@@ -104,13 +104,36 @@
     padding: 5px 15px;
 }
 
-.short-url{
+.short-url, .error-message{
     margin: 0 auto;
     text-align: center;
     padding: 10px 0 45px 0;
     min-width: 250px;
 }
-.short-url .alert-success.alert{
+.short-url:blank, .error-message:blank{
+    padding: 0;
+}
+.error-message .alert-dismissible{
+    padding-right: 0;
+}
+.error-message .btn-default:hover{
+/*    color: black;*/
+    opacity: 1;
+    background-color: transparent;
+    border-color: transparent;
+}
+.error-message button{
+    opacity: 0.4;
+    font-size: 22.5px;
+    font-weight: bold;
+    line-height: 1;
+    margin: 0 0 3px 0px;
+    color: white;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.short-url .alert-success.alert, .error-message .alert-warning.alert{
     display: inline;
 }
 
@@ -120,10 +143,12 @@
 
 .url_grid table tr td .copy-button { visibility: hidden;}
 .url_grid table tr td:first-child{
-      overflow:hidden;
+    overflow:hidden;
     white-space:nowrap;
     text-overflow:ellipsis;
-    max-width:10em;
+    max-width:30px;
+    width: 30%;
+    min-width: 20px;
 }
 .url_grid table tr:hover td .copy-button { visibility:visible;}
 
@@ -140,4 +165,13 @@ div.w2p_flash.alert{
 
 .app-logo{
   height: 30px;
+}
+
+thead th a{
+    color: #3498db;
+    word-spacing: 2px;
+}
+
+thead th a:hover{
+    color: #2976a9;
 }
