@@ -133,7 +133,7 @@
     border-color: transparent;
 }
 
-.short-url .alert-success.alert, .error-message .alert-warning.alert{
+.short-url .alert-success.alert, .error-message .alert-danger.alert{
     display: inline;
 }
 
@@ -163,9 +163,9 @@ div.w2p_flash.alert{
     right: 10px;
 }
 
-.app-logo{
+/*.app-logo{
   height: 30px;
-}
+}*/
 
 thead th a{
     color: #3498db;
@@ -174,4 +174,23 @@ thead th a{
 
 thead th a:hover{
     color: #2976a9;
+}
+
+/*profile icon*/
+.navbar-right .dropdown .user-profile{
+    height: 40px;
+    margin: 10px;
+}
+
+.navbar-right .dropdown .caret{
+    display: none;
+}
+
+.navbar-brand .app-logo{
+    height: 30px;
+    margin: 10px 15px 15px 30px;
+}
+
+.navbar-right.navbar-nav>li>a, .navbar-brand{
+    padding: 0;
 }

@@ -9,7 +9,7 @@ def index():
         del session.short_link
     submit = INPUT(_class="btn btn-primary", _type="Submit", _value="Shorten")
 
-    form = SQLFORM(db.url, buttons=[submit],hideerror=True)
+    form = SQLFORM(db.url, buttons=[submit], hideerror=True)
     form.elements('input')[0]['_placeholder'] = "Enter your long url here"
     form.elements('input')[0]['_autocomplete'] = "off"
     form.elements('.control-label', replace=None)
@@ -31,6 +31,10 @@ def index():
         session.flash = 'Short url created'
         redirect(URL('index'))
     elif form.errors:
+        # May be because of bug in web2py "form-control" class is removed from
+        # input element when form has errors, so add it explicitly
+        inpt = form.element('input')
+        inpt['_class'] = inpt['_class'] + ' ' + 'form-control'
         response.flash = ""
 
     grid = LOAD('default', 'url_grid.load', ajax=True)
@@ -126,4 +130,3 @@ def _get_anon_uid():
     """
     if 'anon_user_uid' in request.cookies:
         return request.cookies['anon_user_uid'].value
-#
