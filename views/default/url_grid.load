@@ -1,4 +1,38 @@
-{{=grid}}
+{{if grid.flatten() != "No records found":}}
+    {{=grid}}
+{{else:}}
+<div class="row app-features">
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <img src="{{=URL('static', 'images/link.png')}}" alt="...">
+            <div class="caption">
+            <h3>Shorten</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <img src="{{=URL('static', 'images/stats.png')}}" alt="...">
+            <div class="caption">
+            <h3>Analyze</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <img src="{{=URL('static', 'images/lock.png')}}" alt="...">
+            <div class="caption">
+            <h3>Protect</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{{pass}}
 
 <!-- QR code Modal starts-->
 <div class="modal fade" id="qr_code_modal" tabindex="-1" role="dialog">
@@ -9,6 +43,7 @@
         <h4 class="modal-title">QR Code</h4>
       </div>
       <div class="modal-body">
+            <div class="spinner"></div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -24,29 +59,19 @@
     jQuery(document).ready(function(){
         $('.button.qr_code').on('click', function()
         {
-            insert_qr_code();
             $('#qr_code_modal').modal(
                 {
                     show: true,
-                    // prevent user from closing modal by clicking outside
-                    // of the modal or pressing escape
-                    backdrop: 'static',
-                    keyboard: false
                 });
+            // remove old qr code if any
+            $('#qr_code_modal .modal-body table').remove();
+            // show loading icon
+            $('.spinner').show();
+            insert_qr_code();
         });
         $('.copy-button').on('click', function()
         {
             copyToClipboard($(this));
-            // $('.short-url button').animate(
-            //  {
-            //   color:red,
-            //   opacity: 1,
-            //   top: '-=100',
-            // }, 500
-            //  );
-        // copied animation
-        // $('.short-url span').addClass('copied');
-        // // setTimeout(function() { $('.short-url span').removeClass('copied'); }, 1500);
         });
     });
 
@@ -56,7 +81,7 @@ function insert_qr_code(){
         dataType: 'json',
         data: {'url': 'www.google.com'},
         success: function(response)
-        {
+        {   
             var table = $("<table />");
             for(i=0; i<response.binary_array.length; i++)
             {
@@ -75,7 +100,7 @@ function insert_qr_code(){
               table.append(table_row);
 
             }
-            $('#qr_code_modal .modal-body table').remove();
+            $('.spinner').hide();
             $('#qr_code_modal .modal-body').append(table);
 
         },

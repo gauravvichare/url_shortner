@@ -1,9 +1,22 @@
 # -*- coding: utf-8 -*-
 from base62 import encode
+from base62 import decode
+
+import re
 NO_RECORD = -1
 
 
 def index():
+    # import pdb; pdb.set_trace()
+    if request.env.request_method == 'GET' and request.args:
+        short_code = request.args(0)
+        regx = re.compile('^[a-zA-Z0-9]{7}$')
+        if regx.match(short_code):
+            record_id = decode(short_code)
+            url = db.url[record_id]
+            if url:
+                redirect(url.long_url)
+
     short_link = session.get('short_link')
     if short_link:
         del session.short_link
@@ -15,11 +28,14 @@ def index():
     form.elements('.control-label', replace=None)
 
     if form.process().accepted:
+        record_id = form.vars.id
         if not auth.is_logged_in():
             anon_id = _get_anon_uid()
         else:
             anon_id = None
-        update_dict = dict(short_code="TeSt4", created_by_anon=anon_id)
+
+        short_code = encode(record_id)
+        update_dict = dict(short_code=short_code, created_by_anon=anon_id)
         db(db.url.id == form.vars.id).update(**update_dict)
 
         # set short link in session and redirect to same page
@@ -27,8 +43,8 @@ def index():
         # warnings when page is reloaded or back button is clicked
         # 1. Confirm form resubmission
         # 2. Confirm form resubmission: ERR_CACHE_MISS
-        session['short_link'] = "http://urlr.in/" + "TeSt4"
-        session.flash = 'Short url created'
+        session['short_link'] = "http://127.0.0.1:8000/" + short_code
+        # session.flash = 'Short url created'
         redirect(URL('index'))
     elif form.errors:
         # May be because of bug in web2py "form-control" class is removed from
@@ -37,7 +53,7 @@ def index():
         inpt['_class'] = inpt['_class'] + ' ' + 'form-control'
         response.flash = ""
 
-    grid = LOAD('default', 'url_grid.load', ajax=True)
+    grid = LOAD(url=URL(a='url_shortner', c='default', f='url_grid', extension='load'), ajax=True)
     return dict(form=form, grid=grid, short_link=short_link)
 
 
@@ -62,13 +78,14 @@ def url_grid():
                         deletable=True, details=False, csv=False, paginate=10,
                         fields=fields, showbuttontext=False, user_signature=False,
                         _class="web2py_grid url_grid", links=link, maxtextlength=50)
+
     return dict(grid=grid)
 
 
-def statistics():
+def analytics():
     """
     """
-    pass
+    return dict()
 
 
 def user():
@@ -119,7 +136,7 @@ def _get_analytics_link():
                                _class='button btn btn-default qr_code',
                                _title='QR Code'),
                              A(SPAN(_class="icon glyphicon glyphicon-stats"),
-                               _href=URL('default', 'statistics', args=row.id),
+                               _href=URL('default', 'analytics', args=encode(row.id), extension=''),
                                _class='button btn btn-default statistics',
                                _title='Statistics'))]
     return link

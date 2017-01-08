@@ -194,3 +194,37 @@ thead th a:hover{
 .navbar-right.navbar-nav>li>a, .navbar-brand{
     padding: 0;
 }
+
+.spinner{
+    background:url("../images/hourglass.gif") no-repeat center center;
+    width:100%;
+    height:100%;
+}
+
+.chart{
+    width: 500px;
+    height: 500px;
+}
+
+.full-width{
+    position: absolute;
+    width: 100%;
+    height: 30px;
+    left: 0;
+}
+
+#qr_code_modal .modal-body .spinner{
+    min-height: 145px;
+}
+.app-features{
+    margin-top: 50px;
+}
+
+.app-features .thumbnail{
+   text-align: center; 
+   border: none;
+}
+
+.app-features .thumbnail img{
+    width: 150px;
+}

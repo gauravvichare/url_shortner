@@ -1,0 +1,130 @@
+{{extend 'layout.html'}}
+
+<div class="full-width url-info col-md-12"></div>
+<div class="col-md-6">
+    <div id="donutchart" class='chart'>
+        <div class="spinner"></div>
+    </div> 
+</div>
+<div class="col-md-6">
+    <div id="barchart_browser" class='chart'>
+        <div class="spinner"></div>
+    </div>
+</div>
+
+
+<div class="col-md-6">
+    <div id="regions_div" class='chart'>
+        <div class="spinner"></div>
+    </div>
+</div>
+<div class="col-md-6">
+    <div id="barchart_platform" class='chart'>
+        <div class="spinner"></div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    // Load Charts and the corechart and barchart packages.
+    google.charts.load('current', {'packages':['corechart', 'bar', 'geochart']});
+
+    // Draw the pie chart and bar chart when Charts is loaded.
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart(argument) {
+        // Referer Donut chart starts
+        var donutchart_data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Work',     11],
+          ['Eat',      2],
+          ['Commute',  2],
+          ['Watch TV', 2],
+          ['Sleep',    7]
+        ]);
+
+        var donutchart_options = {
+          pieHole: 0.5,
+          pieSliceTextStyle: {
+            color: 'black',
+          },
+          legend: 'none'
+        };
+
+        var donutchart = new google.visualization.PieChart(document.getElementById('donutchart'));
+        donutchart.draw(donutchart_data, donutchart_options);
+        // referrer donut chart ends
+
+        // browser bar chart starts
+        var barchart_browser_data = new google.visualization.arrayToDataTable([
+          ['Move', 'Percentage'],
+          ["King's pawn (e4)", 44],
+          ["Queen's pawn (d4)", 31],
+          ["Knight to King 3 (Nf3)", 12],
+          ["Queen's bishop pawn (c4)", 10],
+          ['Other', 3]
+        ]);
+
+        var barchart_browser_options = {
+          width: 500,
+          legend: { position: 'none' },
+          axes: {
+            x: {
+              0: { side: 'top', label: 'White to move'} // Top x-axis.
+            }
+          },
+          bar: { groupWidth: "60%" }
+        };
+
+        var barchart_browser = new google.charts.Bar(document.getElementById('barchart_browser'));
+        // Convert the Classic options to Material options.
+        barchart_browser.draw(barchart_browser_data, google.charts.Bar.convertOptions(barchart_browser_options));
+        // browser bar chart ends
+
+        // country geo chart starts
+        var geochart_data = google.visualization.arrayToDataTable([
+          ['Country', 'Popularity'],
+          ['Germany', 200],
+          ['United States', 300],
+          ['Brazil', 400],
+          ['Canada', 500],
+          ['France', 600],
+          ['RU', 700]
+        ]);
+
+        var geochart_options = {};
+
+        var geochart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+        geochart.draw(geochart_data, geochart_options);
+        // country geo chart ends
+
+        // platform bar chart starts
+        var platform_barchart_data = google.visualization.arrayToDataTable([
+            ['City', '2010 Population'],
+            ['New York City, NY', 8175000],
+            ['Los Angeles, CA', 3792000],
+            ['Chicago, IL', 2695000],
+            ['Houston, TX', 2099000],
+            ['Philadelphia, PA', 1526000]
+        ]);
+
+        var platform_barchart_options = {
+        chart: {
+          title: 'Population of Largest U.S. Cities'
+        },
+        hAxis: {
+          title: 'Total Population',
+          minValue: 0,
+        },
+        vAxis: {
+          title: 'City'
+        },
+        bars: 'horizontal'
+        };
+        var platform_barchart = new google.charts.Bar(document.getElementById('barchart_platform'));
+        platform_barchart.draw(platform_barchart_data, platform_barchart_options);
+        // platform bar chart ends
+    }
+</script>
