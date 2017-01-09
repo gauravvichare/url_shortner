@@ -7,7 +7,7 @@
     <div class="short-url">
         <div class="alert alert-success" role="alert">
             <span>{{=short_link}}</span>
-            <button type="button" class="btn btn-default btn-xs copy-button">Copy</button>
+            <button type="button" class="btn btn-default btn-xs copy-button" title="Copy to Clipboard">Copy</button>
         </div>
     </div>
 {{elif form.errors:}}
@@ -22,8 +22,47 @@
 {{=grid}}
 
 <script type="text/javascript">
-    $('.close-error-message').on('click', function()
-    {
-        $('.error-message').remove();
+    $(document).ready(function() {
+        $("body").tooltip({ selector: 'button, a' });
+
+        $('.copy-button').on('click', function()
+        {
+            copyToClipboard($(this));
+        });
+
+        $('.close-error-message').on('click', function()
+        {
+            $('.error-message').remove();
+        });
+
     });
+
+    function copyToClipboard(thisObj) {
+        // http://codepen.io/nathanlong/pen/ZpAmjv
+        var original_tooltip = thisObj.attr('data-original-title');
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val(thisObj.parent().find('span').text()).select();
+        try
+        {
+            var success = document.execCommand("copy");
+            if (success) {
+                thisObj.attr('data-original-title', 'Copied!').tooltip('show');
+            } else {
+                thisObj.attr('data-original-title', 'Copy with Ctrl-c').tooltip('show');
+            }
+            $temp.remove();
+        }
+        catch (err)
+        {
+            thisObj.attr('data-original-title', 'Copy with Ctrl-c').tooltip('show');
+            $temp.remove();
+        }
+        
+        setTimeout(function() {
+            $('button').tooltip('hide');
+        }, 2000);
+        thisObj.attr('data-original-title', original_tooltip);
+
+    }
 </script>

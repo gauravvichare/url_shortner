@@ -7,7 +7,7 @@ NO_RECORD = -1
 
 
 def index():
-    # import pdb; pdb.set_trace()
+    import pdb; pdb.set_trace()
     if request.env.request_method == 'GET' and request.args:
         short_code = request.args(0)
         regx = re.compile('^[a-zA-Z0-9]{7}$')
@@ -77,7 +77,7 @@ def url_grid():
     grid = SQLFORM.grid(query, create=False, editable=False, searchable=False,
                         deletable=True, details=False, csv=False, paginate=10,
                         fields=fields, showbuttontext=False, user_signature=False,
-                        _class="web2py_grid url_grid", links=link, maxtextlength=50)
+                        _class="web2py_grid url_grid", links=link, maxtextlength=30)
 
     return dict(grid=grid)
 

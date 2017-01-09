@@ -110,14 +110,4 @@ function insert_qr_code(){
         }
     });
 }
-
-function copyToClipboard(thisObj) {
-    debugger;
-    var $temp = $("<input>");
-    $("body").append($temp);
-    $temp.val(thisObj.parent().find('span').text()).select();
-    document.execCommand("copy");
-    $temp.remove();
-}
-
 </script>
