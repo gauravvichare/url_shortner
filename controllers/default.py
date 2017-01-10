@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from base62 import encode
 from base62 import decode
+# from utils import log_visit
 
 import re
 NO_RECORD = -1
 
 
 def index():
-    import pdb; pdb.set_trace()
     if request.env.request_method == 'GET' and request.args:
         short_code = request.args(0)
         regx = re.compile('^[a-zA-Z0-9]{7}$')
@@ -15,6 +15,7 @@ def index():
             record_id = decode(short_code)
             url = db.url[record_id]
             if url:
+                # log_visit(db, request, record_id)
                 redirect(url.long_url)
 
     short_link = session.get('short_link')
@@ -53,7 +54,9 @@ def index():
         inpt['_class'] = inpt['_class'] + ' ' + 'form-control'
         response.flash = ""
 
-    grid = LOAD(url=URL(a='url_shortner', c='default', f='url_grid', extension='load'), ajax=True)
+    grid = LOAD(url=URL(a='url_shortner', c='default', f='url_grid',
+                        extension='load'),
+                ajax=True, content=DIV(_class='spinner'))
     return dict(form=form, grid=grid, short_link=short_link)
 
 

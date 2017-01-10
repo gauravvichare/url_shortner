@@ -208,6 +208,7 @@ thead th a:hover{
     background:url("../images/hourglass.gif") no-repeat center center;
     width:100%;
     height:100%;
+    min-height: 145px;
 }
 
 .chart{

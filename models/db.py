@@ -146,9 +146,9 @@ db.define_table('url', Field('long_url', 'text', requires=IS_URL()),
 
 db.define_table('log_visit',
                 Field('url', db.url),
-                Field('referer_url', 'string'),
-                Field('browser', 'string'),
-                Field('platform', 'string'))
+                Field('referer_url', 'string', default='Other'),
+                Field('browser', 'string', default='Other'),
+                Field('platform', 'string', default='Other'))
 
 db.url.short_code.readable = False
 db.url.short_code.writable = False
