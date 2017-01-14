@@ -13,7 +13,7 @@
 {{elif form.errors:}}
     <div class="error-message">
         <div class="alert alert-danger alert-dismissible" role="alert">
-          <strong>Error!</strong> {{=form.errors['long_url']}}.
+          <strong>Error!</strong> {{=form.errors.get('long_url', '')}}.
             <button type="button" class="close-error-message" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
     </div>

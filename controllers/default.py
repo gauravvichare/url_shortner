@@ -28,7 +28,7 @@ def index():
     form.elements('input')[0]['_autocomplete'] = "off"
     form.elements('.control-label', replace=None)
 
-    if form.process().accepted:
+    if form.process(onvalidation=_extra_validation).accepted:
         record_id = form.vars.id
         if not auth.is_logged_in():
             anon_id = _get_anon_uid()
@@ -44,7 +44,7 @@ def index():
         # warnings when page is reloaded or back button is clicked
         # 1. Confirm form resubmission
         # 2. Confirm form resubmission: ERR_CACHE_MISS
-        session['short_link'] = "http://127.0.0.1:8000/" + short_code
+        session['short_link'] = URL(host=True) + short_code
         # session.flash = 'Short url created'
         redirect(URL('index'))
     elif form.errors:
@@ -58,6 +58,17 @@ def index():
                         extension='load'),
                 ajax=True, content=DIV(_class='spinner'))
     return dict(form=form, grid=grid, short_link=short_link)
+
+
+def _extra_validation(form):
+    """
+    """
+    domain = request.env.http_host
+    re_exp = re.compile('^(http[s]?://)?(w{3}\.)?%s/?([a-zA-Z0-9]{7}/?)?$' % domain)
+
+    if re_exp.match(form.vars.get('long_url', '')):
+        form.errors.long_url = 'This is already %s link' % myconf.get('app.name')
+    pass
 
 
 def url_grid():

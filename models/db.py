@@ -159,11 +159,21 @@ db.url.long_url.represent = lambda long_url, row: A(long_url, _href=long_url, _t
 db.url.created_on.represent = lambda created_on, row: created_on.strftime('%b %d, %Y') if created_on else ''
 db.url.short_code.represent = lambda short_code, row: _create_short_url(short_code)
 
+auth.enable_record_versioning(db)
+
 
 def _create_short_url(short_code):
     """
     """
     if short_code:
-        copy = DIV(SPAN("http://urlr.in/" + short_code), BUTTON('copy', _type="button", _title="Copy to Clipboard", _class="btn btn-default btn-xs copy-button"))
+        copy = DIV(SPAN(host() + short_code), BUTTON('copy', _type="button", _title="Copy to Clipboard", _class="btn btn-default btn-xs copy-button"))
         return copy
-auth.enable_record_versioning(db)
+
+
+def host():
+    """
+    URL(host=True) is giving http://127.0.0.1:8000/url_grid.load.
+    this function returns domain name
+    """
+    return '%s://%s/' % (request.env.get('wsgi_url_scheme',
+                                         'http').lower(), request.env.http_host)
