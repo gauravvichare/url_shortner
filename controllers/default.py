@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from base62 import encode
 from base62 import decode
-# from utils import log_visit
+from utilities import log_visit
 
 import re
 NO_RECORD = -1
@@ -15,7 +15,7 @@ def index():
             record_id = decode(short_code)
             url = db.url[record_id]
             if url:
-                # log_visit(db, request, record_id)
+                log_visit(db, request, record_id)
                 redirect(url.long_url)
 
     short_link = session.get('short_link')
@@ -64,7 +64,7 @@ def _extra_validation(form):
     """
     """
     domain = request.env.http_host
-    re_exp = re.compile('^(http[s]?://)?(w{3}\.)?%s/?([a-zA-Z0-9]{7}/?)?$' % domain)
+    re_exp = re.compile('^(http[s]?://)?(w{3}\.)?%s/?([a-zA-Z0-9]{7}/?)?#?$' % domain)
 
     if re_exp.match(form.vars.get('long_url', '')):
         form.errors.long_url = 'This is already %s link' % myconf.get('app.name')

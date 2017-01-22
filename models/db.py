@@ -138,7 +138,9 @@ if not auth.is_logged_in():
 # -------------------------------------------------------------------------
 # after defining tables, uncomment below to enable auditing
 # -------------------------------------------------------------------------
+
 db._common_fields.append(auth.signature)
+
 db.define_table('url', Field('long_url', 'text', requires=IS_URL()),
                 Field('short_code', 'string', label="Short URL"),
                 Field('created_by_anon', 'string'))
@@ -148,7 +150,26 @@ db.define_table('log_visit',
                 Field('url', db.url),
                 Field('referer_url', 'string', default='Other'),
                 Field('browser', 'string', default='Other'),
-                Field('platform', 'string', default='Other'))
+                Field('platform', 'string', default='Other'),
+                Field('processed', 'boolean', default=False))
+
+db.define_table('referer_stats',
+                Field('url', db.url),
+                Field('stat_day', 'date'),
+                Field('referer_url', 'string', default='Other'),
+                Field('hit_count', 'double'))
+
+db.define_table('browser_stats',
+                Field('url', db.url),
+                Field('stat_day', 'date'),
+                Field('browser', 'string', default='Other'),
+                Field('hit_count', 'double'))
+
+db.define_table('platform_stats',
+                Field('url', db.url),
+                Field('stat_day', 'date'),
+                Field('platform', 'string', default='Other'),
+                Field('hit_count', 'double'))
 
 db.url.short_code.readable = False
 db.url.short_code.writable = False
